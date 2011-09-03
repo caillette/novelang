@@ -23,15 +23,14 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import static org.novelang.rendering.xslt.color.WebColors.State.*;
 
 /**

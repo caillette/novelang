@@ -17,8 +17,6 @@
 
 package org.novelang.common.metadata;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 

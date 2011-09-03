@@ -22,6 +22,7 @@ import java.io.IOException;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+
 import org.novelang.batch.DocumentGenerator;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;

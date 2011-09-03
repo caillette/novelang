@@ -16,9 +16,10 @@
  */
 package org.novelang.novelist;
 
+import org.junit.Test;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.junit.Test;
 
 /**
  * Demo for {@link WordGenerator}.

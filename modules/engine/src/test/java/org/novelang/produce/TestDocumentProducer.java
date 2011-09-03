@@ -26,6 +26,11 @@ import java.util.concurrent.Executors;
 import org.apache.fop.apps.FopFactory;
 import org.junit.Rule;
 import org.junit.Test;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Renderable;
 import org.novelang.common.SyntacticTree;
@@ -44,11 +49,6 @@ import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.testing.junit.MethodSupport;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for

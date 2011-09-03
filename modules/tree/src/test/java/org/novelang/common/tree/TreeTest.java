@@ -19,9 +19,8 @@ package org.novelang.common.tree;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tets for {@link ImmutableTree}.

@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

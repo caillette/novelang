@@ -43,6 +43,9 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
+import static com.google.common.base.Charsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Directory;
@@ -57,9 +60,6 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.testing.junit.MethodSupport;
-
-import static com.google.common.base.Charsets.UTF_8;
-import static org.junit.Assert.assertEquals;
 
 /**
  * A JUnit {@link org.junit.Rule} supporting concurrent test execution.

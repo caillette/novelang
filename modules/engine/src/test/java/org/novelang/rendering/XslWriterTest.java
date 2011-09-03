@@ -17,7 +17,6 @@
 package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -28,6 +27,7 @@ import org.apache.fop.apps.FopFactory;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Test;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.metadata.DocumentMetadata;

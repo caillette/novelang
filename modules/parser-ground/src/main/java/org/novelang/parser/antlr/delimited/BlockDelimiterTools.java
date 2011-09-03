@@ -18,11 +18,12 @@ package org.novelang.parser.antlr.delimited;
 
 import java.util.List;
 
-import org.novelang.common.Problem;
-import org.novelang.common.LocationFactory;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
+import org.novelang.common.LocationFactory;
+import org.novelang.common.Problem;
 
 /**
  * @author Laurent Caillette

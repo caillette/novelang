@@ -19,6 +19,7 @@ package org.novelang.nhovestone;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableList;
+
 import org.novelang.Version;
 import org.novelang.VersionFormatException;
 
@@ -30,6 +31,8 @@ import org.novelang.VersionFormatException;
 public class NhovestoneTools {
 
   private static final Pattern COMMASEPARATEDVERSIONSSPLIT_PATTERN = Pattern.compile( "," );
+
+  private NhovestoneTools() { }
 
   public static Iterable<Version> parseVersions( final String commaSeparatedVersions )
       throws VersionFormatException

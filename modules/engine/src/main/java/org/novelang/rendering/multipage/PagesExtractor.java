@@ -17,6 +17,7 @@
 package org.novelang.rendering.multipage;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.PageIdentifier;
 

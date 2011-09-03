@@ -17,13 +17,11 @@
 package org.novelang.testing;
 
 import java.security.Permission;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.google.common.base.Preconditions.checkState;
 
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Traps calls to {@link System#exit(int)} by installing some hacky {@code SecurityManager}.

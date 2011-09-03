@@ -19,11 +19,11 @@ package org.novelang.nhovestone;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 import org.novelang.Version;
 import org.novelang.VersionFormatException;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Laurent Caillette

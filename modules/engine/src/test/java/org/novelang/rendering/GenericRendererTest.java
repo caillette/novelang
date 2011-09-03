@@ -25,6 +25,10 @@ import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.Location;
 import org.novelang.common.Nodepath;
 import org.novelang.common.Problem;
@@ -35,10 +39,6 @@ import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.MetadataHelper;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.NodeKind;
-
-import static org.junit.Assert.assertEquals;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette

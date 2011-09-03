@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+
 import org.novelang.Version;
 import org.novelang.logger.ConcreteLoggerFactory;
 import org.novelang.logger.Logger;

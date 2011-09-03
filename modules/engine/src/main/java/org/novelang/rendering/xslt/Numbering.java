@@ -22,6 +22,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 

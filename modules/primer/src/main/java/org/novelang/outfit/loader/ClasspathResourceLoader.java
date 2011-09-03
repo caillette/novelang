@@ -23,9 +23,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang.SystemUtils;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.apache.commons.lang.SystemUtils;
 
 /**
  * Loads resources relative to the root package of some given class

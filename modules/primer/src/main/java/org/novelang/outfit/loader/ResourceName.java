@@ -19,9 +19,10 @@ package org.novelang.outfit.loader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.ClassUtils;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.apache.commons.lang.ClassUtils;
 
 /**
  * Holds a resource name, guaranteeing the respect of a {@link #PATTERN}.

@@ -22,10 +22,10 @@ import java.io.IOException;
 
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+
 import org.novelang.outfit.TemporaryFileService;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for {@link CisternOutputStream}.

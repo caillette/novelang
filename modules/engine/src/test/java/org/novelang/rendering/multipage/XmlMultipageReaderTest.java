@@ -21,13 +21,13 @@ import java.io.StringReader;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
-import org.novelang.common.metadata.PageIdentifier;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.novelang.common.metadata.PageIdentifier;
 
 /**
  * Tests for {@link org.novelang.rendering.multipage.XmlMultipageReader}.

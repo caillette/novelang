@@ -17,9 +17,10 @@
 
 package org.novelang.parser.antlr;
 
-import org.novelang.common.Location;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
+
+import org.novelang.common.Location;
 
 /**
  * A {@code CommonTree} created by {@link org.novelang.parser.antlr.NovelangParser}.

@@ -16,12 +16,12 @@
  */
 package org.novelang;
 
+import static org.novelang.common.filefixture.ResourceSchema.directory;
+import static org.novelang.common.filefixture.ResourceSchema.resource;
+
 import org.novelang.common.filefixture.Directory;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceSchema;
-
-import static org.novelang.common.filefixture.ResourceSchema.directory;
-import static org.novelang.common.filefixture.ResourceSchema.resource;
 
 /**
  * Schema of all resources used by tests.

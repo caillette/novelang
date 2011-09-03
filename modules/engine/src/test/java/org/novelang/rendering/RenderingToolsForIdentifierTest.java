@@ -20,16 +20,16 @@ import java.util.regex.Pattern;
 
 import org.fest.reflect.core.Reflection;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.novella.Novella;
 import org.novelang.novella.NovellaFixture;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for 

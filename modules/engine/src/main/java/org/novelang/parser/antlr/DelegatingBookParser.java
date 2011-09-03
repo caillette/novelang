@@ -17,6 +17,7 @@
 package org.novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
+
 import org.novelang.common.LocationFactory;
 import org.novelang.parser.BookParser;
 

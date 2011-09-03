@@ -22,6 +22,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.parse.ArgumentException;

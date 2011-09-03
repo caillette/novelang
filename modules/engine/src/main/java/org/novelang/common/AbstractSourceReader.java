@@ -31,6 +31,7 @@ import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
+
 import org.novelang.common.metadata.MetadataHelper;
 import org.novelang.common.tree.TreeTools;
 import org.novelang.designator.Tag;

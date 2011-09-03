@@ -17,9 +17,9 @@
 
 package org.novelang.common.tree;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.base.Preconditions;
 
 /**
  * Index-based reference in a {@link Tree} that only takes care of trees satisfying a given

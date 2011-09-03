@@ -24,12 +24,12 @@ import javax.management.ObjectName;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.shell.insider.Insider;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Starts and shuts down a JVM with an {@link org.novelang.outfit.shell.insider.InsiderAgent}

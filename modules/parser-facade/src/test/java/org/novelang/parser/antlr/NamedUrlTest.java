@@ -16,11 +16,11 @@
  */
 package org.novelang.parser.antlr;
 
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests various features that aim to attach a block inside double quotes to a URL as its name.

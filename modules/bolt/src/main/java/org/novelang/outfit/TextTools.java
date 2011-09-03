@@ -16,8 +16,8 @@
  */
 package org.novelang.outfit;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for language constructs.

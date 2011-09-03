@@ -19,14 +19,21 @@ package org.novelang.rendering.multipage;
 import java.io.File;
 import java.io.StringReader;
 import java.util.concurrent.Executors;
+import javax.xml.transform.URIResolver;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import javax.xml.transform.URIResolver;
 import org.apache.commons.io.FileUtils;
 import org.fest.assertions.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.novelang.ResourcesForTests.initialize;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -43,13 +50,6 @@ import org.novelang.outfit.xml.LocalUriResolver;
 import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.testing.junit.MethodSupport;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.novelang.ResourcesForTests.initialize;
 
 /**
  * Tests for {@link org.novelang.rendering.multipage.XslMultipageStylesheetCapture}.

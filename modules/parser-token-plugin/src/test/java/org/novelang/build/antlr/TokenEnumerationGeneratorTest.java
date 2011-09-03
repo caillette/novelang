@@ -23,8 +23,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import junit.framework.Assert;
-import org.novelang.common.TagBehavior;
 import org.junit.Test;
+
+import org.novelang.common.TagBehavior;
 
 
 /**

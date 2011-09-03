@@ -18,12 +18,12 @@ package org.novelang.outfit.shell;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.shell.insider.Insider;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Calls {@link org.novelang.outfit.shell.insider.Insider#keepAlive()} at repeated intervals

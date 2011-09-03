@@ -24,6 +24,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.novelang.ResourcesForTests.Images;
+import static org.novelang.ResourcesForTests.initialize;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.ResourceTools;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.filefixture.Relativizer;
@@ -35,11 +40,6 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.novelang.ResourcesForTests.Images;
-import static org.novelang.ResourcesForTests.initialize;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link Opus} with embedded images.

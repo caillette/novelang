@@ -20,10 +20,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.google.common.base.Throwables;
-import org.novelang.common.ReflectionTools;
 import org.antlr.runtime.RecognitionException;
-
 import static org.junit.Assert.assertSame;
+
+import org.novelang.common.ReflectionTools;
 
 /**
  * Calls a pluggable method of ANTLR-generated parser.

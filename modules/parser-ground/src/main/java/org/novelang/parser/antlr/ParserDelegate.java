@@ -18,14 +18,15 @@ package org.novelang.parser.antlr;
 
 import java.util.List;
 
-import org.novelang.common.Location;
-import org.novelang.common.Problem;
-import org.novelang.parser.antlr.delimited.BlockDelimiter;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeAdaptor;
+
+import org.novelang.common.Location;
+import org.novelang.common.Problem;
+import org.novelang.parser.antlr.delimited.BlockDelimiter;
 
 /**
  * @author Laurent Caillette

@@ -24,7 +24,6 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.junit.Test;
-
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 

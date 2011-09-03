@@ -22,14 +22,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jetty.server.Request;
+
 import org.novelang.common.FileTools;
 import org.novelang.common.StructureKind;
 import org.novelang.configuration.ContentConfiguration;

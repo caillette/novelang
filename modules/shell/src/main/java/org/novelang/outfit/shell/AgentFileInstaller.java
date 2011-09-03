@@ -24,9 +24,10 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import org.apache.commons.io.FileUtils;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Installs the jar of the {@link org.novelang.outfit.shell.insider.InsiderAgent} somewhere

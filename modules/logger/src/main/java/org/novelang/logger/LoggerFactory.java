@@ -16,8 +16,6 @@
  */
 package org.novelang.logger;
 
-import static com.google.common.base.Preconditions.checkState;
-
 /**
  * The API for obtaining instances of {@link Logger} object.
  * <p>

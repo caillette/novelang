@@ -17,8 +17,6 @@
 
 package org.novelang.build;
 
-import java.io.IOException;
-
 /**
  * Generates code.
  *

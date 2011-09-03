@@ -25,10 +25,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import javax.imageio.ImageIO;
 
 import com.google.common.collect.ImmutableList;
-import javax.imageio.ImageIO;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.SystemUtils;
+import static org.novelang.KnownVersions.*;
+
 import org.novelang.Version;
 import org.novelang.VersionFormatException;
 import org.novelang.common.FileTools;
@@ -44,11 +47,6 @@ import org.novelang.outfit.Husk;
 import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.shell.ProcessCreationException;
 import org.novelang.outfit.shell.ProcessInitializationException;
-import org.apache.commons.io.output.FileWriterWithEncoding;
-
-import static org.novelang.KnownVersions.VERSION_0_35_0;
-import static org.novelang.KnownVersions.VERSION_0_38_1;
-import static org.novelang.KnownVersions.VERSION_0_41_0;
 
 /**
  * Main class generating the Nhovestone report.

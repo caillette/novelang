@@ -19,9 +19,9 @@ package org.novelang.parser.unicode;
 
 
 import org.novelang.build.CodeGenerationTools;
-import org.novelang.outfit.TextTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.TextTools;
 
 /**
  * Reads Unicode character names from a binary file

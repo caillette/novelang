@@ -17,7 +17,6 @@
 package org.novelang.common.metadata;
 
 import com.google.common.collect.ImmutableMap;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

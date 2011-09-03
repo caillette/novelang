@@ -19,11 +19,12 @@ package org.novelang.build.unicode;
 import java.io.File;
 import java.io.IOException;
 
-import org.novelang.build.CodeGenerationTools;
-import org.novelang.logger.ConcreteLoggerFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+
+import org.novelang.build.CodeGenerationTools;
+import org.novelang.logger.ConcreteLoggerFactory;
 import org.novelang.logger.LoggerFactory;
 
 /**

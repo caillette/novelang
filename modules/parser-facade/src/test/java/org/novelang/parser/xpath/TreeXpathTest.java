@@ -20,13 +20,13 @@ import com.google.common.collect.ImmutableList;
 import org.jaxen.JaxenException;
 import org.jaxen.UnresolvableException;
 import org.junit.Test;
-import org.novelang.common.SyntacticTree;
-import org.novelang.common.tree.Treepath;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.novelang.parser.NodeKind.OPUS;
 import static org.novelang.parser.NodeKind._LEVEL;
 import static org.novelang.parser.antlr.TreeFixture.tree;
+
+import org.novelang.common.SyntacticTree;
+import org.novelang.common.tree.Treepath;
 
 /**
  *

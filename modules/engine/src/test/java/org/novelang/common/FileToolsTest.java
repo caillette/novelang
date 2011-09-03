@@ -23,11 +23,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.novelang.common.filefixture.ResourceInstaller;
-import org.novelang.testing.DirectoryFixture;
+
 import org.novelang.testing.junit.MethodSupport;
 
 /**

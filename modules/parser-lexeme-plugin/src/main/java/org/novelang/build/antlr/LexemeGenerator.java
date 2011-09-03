@@ -21,8 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import org.novelang.build.GrammarBasedJavaGenerator;
 import org.antlr.stringtemplate.StringTemplate;
+
+import org.novelang.build.GrammarBasedJavaGenerator;
 import org.novelang.parser.shared.Lexeme;
 
 

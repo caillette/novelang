@@ -19,19 +19,19 @@ package org.novelang.parser.antlr;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonErrorNode;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import org.antlr.runtime.tree.RewriteCardinalityException;
+import org.antlr.runtime.tree.Tree;
+
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
-import org.antlr.runtime.tree.Tree;
 //import NovelangLexer;
 //import AllTokens;
 

@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import org.novelang.parser.shared.Lexeme;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.novelang.parser.shared.Lexeme;
 
 /**
  * @author Laurent Caillette

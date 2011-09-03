@@ -19,9 +19,10 @@ package org.novelang.rendering;
 import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;
 
-import org.fest.assertions.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -36,8 +37,6 @@ import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.StreamDirector;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Test for parameters passed to the XSL stylesheet.

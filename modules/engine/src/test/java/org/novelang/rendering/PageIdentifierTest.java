@@ -17,9 +17,9 @@
 package org.novelang.rendering;
 
 import org.junit.Test;
-import org.novelang.common.metadata.PageIdentifier;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.novelang.common.metadata.PageIdentifier;
 
 /**
  * A page name for a multipage document.

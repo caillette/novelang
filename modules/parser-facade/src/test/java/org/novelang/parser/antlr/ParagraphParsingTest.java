@@ -17,17 +17,17 @@
 
 package org.novelang.parser.antlr;
 
+import org.antlr.runtime.RecognitionException;
+import org.junit.Ignore;
+import org.junit.Test;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.SourceUnescape;
-import org.antlr.runtime.RecognitionException;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * GUnit sucks as it has completely obscure failures and stupid reports,

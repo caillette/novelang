@@ -18,7 +18,6 @@ package org.novelang.outfit;
 
 import org.fest.assertions.Assertions;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

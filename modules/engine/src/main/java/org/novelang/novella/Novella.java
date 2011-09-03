@@ -26,6 +26,7 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+
 import org.novelang.common.AbstractSourceReader;
 import org.novelang.common.Problem;
 import org.novelang.common.ProblemCollector;

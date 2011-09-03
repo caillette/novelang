@@ -22,16 +22,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.google.common.base.Preconditions;
 import javax.imageio.ImageIO;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLResolver;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
+
 import org.novelang.common.FileTools;
 import org.novelang.common.Problem;
 import org.novelang.common.ProblemCollector;
@@ -39,12 +40,8 @@ import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
-import org.novelang.configuration.ConfigurationTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.loader.ClasspathResourceLoader;
-import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceName;
 import org.novelang.parser.NodeKind;
 
 /**

@@ -16,12 +16,13 @@
  */
 package org.novelang.nhovestone.scenario;
 
-import com.google.common.base.Preconditions;
-import org.novelang.nhovestone.Termination;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+
+import com.google.common.base.Preconditions;
+
+import org.novelang.nhovestone.Termination;
 
 /**
 * @author Laurent Caillette

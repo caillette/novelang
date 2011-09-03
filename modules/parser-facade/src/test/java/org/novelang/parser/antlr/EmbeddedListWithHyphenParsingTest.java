@@ -16,9 +16,9 @@
  */
 package org.novelang.parser.antlr;
 
-import org.novelang.parser.NodeKind;
-
 import static org.novelang.parser.NodeKind.EMBEDDED_LIST_ITEM_WITH_HYPHEN_;
+
+import org.novelang.parser.NodeKind;
 
 /**
  * Tests for embedded list parsing.

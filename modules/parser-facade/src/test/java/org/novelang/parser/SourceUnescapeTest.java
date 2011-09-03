@@ -17,9 +17,9 @@
 package org.novelang.parser;
 
 import org.junit.Assert;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 import static org.novelang.parser.SourceUnescape.ESCAPE_END;
 import static org.novelang.parser.SourceUnescape.ESCAPE_START;
 

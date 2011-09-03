@@ -17,12 +17,12 @@
 package org.novelang.treemangling;
 
 import org.junit.Test;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link org.novelang.treemangling.ListMangler}.

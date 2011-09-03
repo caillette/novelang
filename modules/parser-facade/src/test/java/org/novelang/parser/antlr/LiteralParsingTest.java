@@ -16,14 +16,14 @@
  */
 package org.novelang.parser.antlr;
 
-import org.junit.Test;
-import org.junit.Ignore;
 import org.antlr.runtime.RecognitionException;
+import org.junit.Ignore;
+import org.junit.Test;
+import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.parser.SourceUnescape;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.NodeKind.NOVELLA;
 
 /**
  * Tests for parsing various kinds of literal.

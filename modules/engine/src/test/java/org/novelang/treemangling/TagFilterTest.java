@@ -20,6 +20,9 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.designator.Tag;
@@ -27,9 +30,6 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link TagFilter}.

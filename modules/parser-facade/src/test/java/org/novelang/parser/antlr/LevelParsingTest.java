@@ -16,13 +16,14 @@
  */
 package org.novelang.parser.antlr;
 
-import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import org.junit.Test;
 import static org.novelang.parser.NodeKind.*;
-import org.novelang.parser.NodeKind;
+import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
+import org.novelang.parser.NodeKind;
 
 /**
  * Tests for level parsing.

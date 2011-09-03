@@ -18,6 +18,7 @@
 package org.novelang.parser.antlr;
 
 import junit.framework.AssertionFailedError;
+
 import org.novelang.common.Problem;
 
 

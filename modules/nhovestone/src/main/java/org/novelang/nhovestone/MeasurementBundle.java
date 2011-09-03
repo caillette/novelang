@@ -16,10 +16,10 @@
  */
 package org.novelang.nhovestone;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Iterator;
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author Laurent Caillette

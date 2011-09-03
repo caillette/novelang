@@ -20,16 +20,17 @@ package org.novelang.daemon;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.eclipse.jetty.server.Request;
+
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.configuration.ProducerConfiguration;

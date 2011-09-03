@@ -24,9 +24,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
-import org.novelang.testing.junit.MethodSupport;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.novelang.testing.junit.MethodSupport;
 
 /**
  * Get sure that {@link org.novelang.outfit.shell.StupidListener} does what we think it does

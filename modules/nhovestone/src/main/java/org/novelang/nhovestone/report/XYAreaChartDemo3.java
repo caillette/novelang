@@ -17,8 +17,8 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-
 import javax.swing.JPanel;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

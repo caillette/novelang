@@ -18,11 +18,12 @@ package org.novelang.parser.antlr;
 
 import java.util.Map;
 
-import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
-import static org.novelang.parser.antlr.TreeFixture.tree;
+import org.junit.Test;
 import static org.novelang.parser.NodeKind.WORD_;
 import static org.novelang.parser.NodeKind.WORD_AFTER_CIRCUMFLEX_ACCENT;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.parser.SourceUnescape;
 
 /**

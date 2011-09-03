@@ -19,18 +19,21 @@ package org.novelang.rendering;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-
-import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
-import org.apache.commons.io.FilenameUtils;
+
+import com.google.common.collect.ImmutableMap;
 import org.apache.xalan.transformer.TransformerImpl;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.SAXException;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
@@ -55,11 +58,6 @@ import org.novelang.rendering.multipage.PagesExtractor;
 import org.novelang.rendering.multipage.XslMultipageStylesheetCapture;
 import org.novelang.rendering.multipage.XslPageIdentifierExtractor;
 import org.novelang.rendering.xslt.validate.SaxConnectorForVerifier;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Writes XML basing on an XSLT stylesheet.

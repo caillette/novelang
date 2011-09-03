@@ -16,10 +16,11 @@
  */
 package org.novelang.rendering.xslt;
 
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * @author Laurent Caillette

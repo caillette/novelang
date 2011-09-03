@@ -23,6 +23,12 @@ import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.junit.Assert.assertSame;
+import static org.novelang.ResourcesForTests.Images;
+import static org.novelang.ResourcesForTests.initialize;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.Problem;
 import org.novelang.common.ProblemCollector;
 import org.novelang.common.SyntacticTree;
@@ -33,12 +39,6 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.junit.Assert.assertSame;
-import static org.novelang.ResourcesForTests.Images;
-import static org.novelang.ResourcesForTests.initialize;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link ImageFixer}

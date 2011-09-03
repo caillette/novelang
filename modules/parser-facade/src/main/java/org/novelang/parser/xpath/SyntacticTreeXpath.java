@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 

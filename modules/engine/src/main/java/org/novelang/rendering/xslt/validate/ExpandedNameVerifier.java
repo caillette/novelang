@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+
 import org.novelang.common.Location;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;

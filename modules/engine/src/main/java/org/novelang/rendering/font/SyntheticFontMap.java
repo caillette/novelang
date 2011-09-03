@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.FontTriplet;
+
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 

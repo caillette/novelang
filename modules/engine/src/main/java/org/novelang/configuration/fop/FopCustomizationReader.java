@@ -20,17 +20,17 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import static com.google.common.collect.ImmutableList.of;
+import static org.novelang.configuration.fop.XmlElement.*;
+
 import org.novelang.outfit.CollectionTools;
 import org.novelang.outfit.Husk;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.IncorrectXmlException;
 import org.novelang.outfit.xml.StackBasedElementReader;
 import org.novelang.outfit.xml.XmlNamespaces;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-
-import static com.google.common.collect.ImmutableList.of;
-import static org.novelang.configuration.fop.XmlElement.*;
 
 /**
  * Creates a {@link FopCustomization}.

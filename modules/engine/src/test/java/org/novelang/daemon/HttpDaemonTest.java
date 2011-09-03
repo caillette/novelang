@@ -26,25 +26,21 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.Rule;
 import org.junit.Test;
+import static com.google.common.base.Charsets.ISO_8859_1;
+import static com.google.common.base.Charsets.UTF_8;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.novelang.daemon.HttpDaemonFixture.PDF;
+import static org.novelang.daemon.HttpDaemonFixture.shaveComments;
+import static org.novelang.outfit.TextTools.unixifyLineBreaks;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.*;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.MalformedRequestException;
 import org.novelang.rendering.multipage.MultipageFixture;
-
-import static com.google.common.base.Charsets.ISO_8859_1;
-import static com.google.common.base.Charsets.UTF_8;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.novelang.daemon.HttpDaemonFixture.PDF;
-import static org.novelang.daemon.HttpDaemonFixture.shaveComments;
-import static org.novelang.outfit.TextTools.unixifyLineBreaks;
-import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.MAIN;
-import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ONE;
-import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ZERO;
 
 /**
  * Tests for {@link HttpDaemon} based on {@link org.novelang.daemon.HttpDaemonSupport}.

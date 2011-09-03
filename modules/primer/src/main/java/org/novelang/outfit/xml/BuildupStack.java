@@ -21,10 +21,9 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import org.novelang.outfit.CollectionTools;
-
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import org.novelang.outfit.CollectionTools;
 
 /**
  * A stack of "buildup" objects (representing objects being built during XML parsing),

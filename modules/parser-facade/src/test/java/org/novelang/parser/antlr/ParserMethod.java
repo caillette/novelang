@@ -18,13 +18,14 @@ package org.novelang.parser.antlr;
 
 import java.lang.reflect.Method;
 
-import org.novelang.common.ReflectionTools;
-import org.novelang.common.SyntacticTree;
-import org.novelang.treemangling.SeparatorsMangler;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonErrorNode;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Assert;
+
+import org.novelang.common.ReflectionTools;
+import org.novelang.common.SyntacticTree;
+import org.novelang.treemangling.SeparatorsMangler;
 
 
 /**

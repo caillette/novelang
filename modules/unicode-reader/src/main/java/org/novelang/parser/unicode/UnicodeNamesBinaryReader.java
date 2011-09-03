@@ -17,10 +17,10 @@
 
 package org.novelang.parser.unicode;
 
-import java.net.URL;
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import com.google.common.base.Preconditions;

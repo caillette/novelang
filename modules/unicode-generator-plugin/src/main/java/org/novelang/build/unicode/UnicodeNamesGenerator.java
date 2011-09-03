@@ -17,26 +17,27 @@
 
 package org.novelang.build.unicode;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.BufferedOutputStream;
 import java.nio.charset.Charset;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Comparator;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.novelang.build.CodeGenerationTools;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.novelang.build.CodeGenerationTools;
 
 /**
  * Generates a file containing every Unicode name.

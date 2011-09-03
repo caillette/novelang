@@ -16,11 +16,12 @@
  */
 package org.novelang.outfit.xml;
 
-import com.google.common.collect.ImmutableList;
 import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
+
+import com.google.common.collect.ImmutableList;
+
 import org.novelang.outfit.CompositeException;
-import org.xml.sax.SAXException;
 
 /**
  * Thrown by {@link TransformerErrorListener}.

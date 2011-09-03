@@ -16,13 +16,14 @@
  */
 package org.novelang.outfit.xml;
 
-import com.google.common.collect.ImmutableList;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
+
+import com.google.common.collect.ImmutableList;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Logs all errors as they come and keeps them for rethrowing.

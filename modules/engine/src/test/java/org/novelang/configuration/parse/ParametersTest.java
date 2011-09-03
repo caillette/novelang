@@ -24,6 +24,8 @@ import org.apache.commons.lang.ClassUtils;
 import org.fest.assertions.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.novelang.ResourceTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -31,8 +33,6 @@ import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.MalformedRequestException;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.junit.Assert.*;
 
 /**
  * Tests for {@link GenericParameters}, {@link DocumentGeneratorParameters}, {@link DaemonParameters}.

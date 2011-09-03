@@ -19,10 +19,11 @@ package org.novelang.parser;
 import java.util.Set;
 
 import com.google.common.base.Joiner;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Tests for {@link NodeKindTools}.

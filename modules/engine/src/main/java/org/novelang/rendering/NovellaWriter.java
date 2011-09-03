@@ -20,15 +20,16 @@ package org.novelang.rendering;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-
 import javax.xml.transform.TransformerConfigurationException;
+
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+
 import org.novelang.common.Nodepath;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.TransformerCompositeException;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 /**
  * A {@link FragmentWriter} which rewrites Novelang source.

@@ -21,12 +21,13 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.Token;
+
 import org.novelang.common.LocationFactory;
 import org.novelang.common.Problem;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.antlr.runtime.MismatchedTokenException;
-import org.antlr.runtime.Token;
 
 /**
  * Delegates to multiple {@link BlockDelimitersBoundary}.

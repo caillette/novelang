@@ -21,19 +21,21 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
-import java.net.ConnectException ;
+import javax.management.InstanceNotFoundException;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
-import javax.management.InstanceNotFoundException;
 import org.apache.commons.io.FileUtils;
 import org.fest.reflect.core.Reflection;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.TcpPortBooker;
@@ -41,10 +43,6 @@ import org.novelang.outfit.shell.insider.Insider;
 import org.novelang.testing.RepeatedAssert;
 import org.novelang.testing.StandalonePredicate;
 import org.novelang.testing.junit.MethodSupport;
-
-import static com.google.common.collect.ImmutableList.of;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for {@link JavaShell}.

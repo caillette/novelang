@@ -24,15 +24,15 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
+import org.xml.sax.Attributes;
+import static com.google.common.collect.ImmutableList.of;
+import static org.novelang.rendering.multipage.MultipageElement.*;
+
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.outfit.Husk;
 import org.novelang.outfit.xml.IncorrectXmlException;
 import org.novelang.outfit.xml.StackBasedElementReader;
 import org.novelang.outfit.xml.XmlNamespaces;
-import org.xml.sax.Attributes;
-
-import static com.google.common.collect.ImmutableList.of;
-import static org.novelang.rendering.multipage.MultipageElement.*;
 
 /**
  * Reads XML representing a list of pages as internally rendered by

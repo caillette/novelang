@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.novelang.common.Nodepath;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.parser.NodeKind;

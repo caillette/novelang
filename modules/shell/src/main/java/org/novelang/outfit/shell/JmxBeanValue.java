@@ -19,8 +19,6 @@ package org.novelang.outfit.shell;
 
 import javax.management.ObjectName;
 
-import org.novelang.outfit.shell.JmxConnectionBundle;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

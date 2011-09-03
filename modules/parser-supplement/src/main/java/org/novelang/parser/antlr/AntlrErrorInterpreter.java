@@ -17,19 +17,19 @@
 
 package org.novelang.parser.antlr;
 
-import org.novelang.parser.unicode.UnicodeNames;
+import org.antlr.runtime.EarlyExitException;
+import org.antlr.runtime.FailedPredicateException;
+import org.antlr.runtime.MismatchedNotSetException;
+import org.antlr.runtime.MismatchedSetException;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.MismatchedTreeNodeException;
+import org.antlr.runtime.MissingTokenException;
+import org.antlr.runtime.NoViableAltException;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.UnwantedTokenException;
 
-import org.antlr.runtime.EarlyExitException ;
-import org.antlr.runtime.FailedPredicateException ;
-import org.antlr.runtime.MismatchedNotSetException ;
-import org.antlr.runtime.MismatchedSetException ;
-import org.antlr.runtime.MismatchedTokenException ;
-import org.antlr.runtime.MismatchedTreeNodeException ;
-import org.antlr.runtime.MissingTokenException ;
-import org.antlr.runtime.NoViableAltException ;
-import org.antlr.runtime.RecognitionException ;
-import org.antlr.runtime.Token ;
-import org.antlr.runtime.UnwantedTokenException ;
+import org.novelang.parser.unicode.UnicodeNames;
 
 /**
  * Copied from {@link org.antlr.runtime.BaseRecognizer}

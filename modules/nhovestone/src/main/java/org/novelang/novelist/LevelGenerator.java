@@ -21,9 +21,9 @@ import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import org.novelang.designator.Tag;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import org.novelang.designator.Tag;
 
 /**
  * @author Laurent Caillette

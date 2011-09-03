@@ -16,12 +16,10 @@
  */
 package org.novelang.outfit;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.novelang.outfit.TextTools.LINE_FEED;
-import static org.novelang.outfit.TextTools.CARRIAGE_RETURN;
-import static org.novelang.outfit.TextTools.unixifyLineBreaks;
+import static org.novelang.outfit.TextTools.*;
 
 /**
  * Tests for {@link org.novelang.outfit.TextTools}.

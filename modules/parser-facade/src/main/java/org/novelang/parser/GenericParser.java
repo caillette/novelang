@@ -18,6 +18,7 @@
 package org.novelang.parser;
 
 import org.antlr.runtime.RecognitionException;
+
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
 

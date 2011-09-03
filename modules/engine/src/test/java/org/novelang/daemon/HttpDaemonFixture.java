@@ -27,15 +27,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.pdfbox.pdmodel.PDDocument;
+import org.pdfbox.util.PDFTextStripper;
+import static org.junit.Assert.assertTrue;
+
 import org.novelang.common.filefixture.Resource;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.rendering.RenditionMimeType;
-import org.pdfbox.pdmodel.PDDocument;
-import org.pdfbox.util.PDFTextStripper;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Collection of methods and small classes for tests.

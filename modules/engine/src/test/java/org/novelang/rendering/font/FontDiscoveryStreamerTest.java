@@ -20,10 +20,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
-
 import javax.xml.transform.TransformerConfigurationException;
+
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
+import org.xml.sax.SAXException;
+
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
@@ -36,7 +38,6 @@ import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.rendering.XslWriter;
-import org.xml.sax.SAXException;
 
 /**
  * Tests for {@link FontDiscoveryStreamer}.

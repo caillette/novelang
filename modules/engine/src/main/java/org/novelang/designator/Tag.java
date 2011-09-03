@@ -28,11 +28,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
+import static org.novelang.parser.NodeKind.TAG;
+
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.parser.NodeKind;
-
-import static org.novelang.parser.NodeKind.TAG;
 
 /**
  * Strong-types a Tag which is just a non-null, non-empty String.

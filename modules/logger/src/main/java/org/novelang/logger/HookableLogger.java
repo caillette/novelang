@@ -19,7 +19,6 @@ package org.novelang.logger;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

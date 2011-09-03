@@ -21,9 +21,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link UnicodeNamesTextReader}.

@@ -25,6 +25,12 @@ import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.novelang.ResourcesForTests.initialize;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Location;
@@ -41,14 +47,6 @@ import org.novelang.opus.function.CommandParameterException;
 import org.novelang.opus.function.builtin.insert.LevelHead;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.novelang.ResourcesForTests.initialize;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link InsertCommand}.

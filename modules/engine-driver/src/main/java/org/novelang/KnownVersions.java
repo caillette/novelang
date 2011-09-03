@@ -19,8 +19,9 @@ package org.novelang;
 import java.io.File;
 
 import com.google.common.base.Preconditions;
-import org.novelang.outfit.shell.JavaClasses;
 import org.apache.commons.io.FilenameUtils;
+
+import org.novelang.outfit.shell.JavaClasses;
 
 /**
  * @author Laurent Caillette

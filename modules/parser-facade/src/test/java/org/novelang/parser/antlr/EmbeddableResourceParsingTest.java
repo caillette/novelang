@@ -16,11 +16,11 @@
  */
 package org.novelang.parser.antlr;
 
-import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
-import static org.novelang.parser.antlr.TreeFixture.tree;
+import org.junit.Test;
 import static org.novelang.parser.NodeKind.RASTER_IMAGE;
 import static org.novelang.parser.NodeKind.RESOURCE_LOCATION;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette

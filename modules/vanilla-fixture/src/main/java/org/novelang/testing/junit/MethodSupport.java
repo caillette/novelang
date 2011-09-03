@@ -25,11 +25,11 @@ import com.google.common.base.Throwables;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.testing.DirectoryFixture;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Laurent Caillette

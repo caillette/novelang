@@ -18,6 +18,7 @@ package org.novelang.configuration.fop;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 import org.novelang.outfit.loader.ResourceName;
 
 /**

@@ -16,9 +16,9 @@
  */
 package org.novelang.parser.shared;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
-import com.google.common.base.Preconditions;
 
 /**
  * Holds lexeme declaration as found in Novelang grammar.

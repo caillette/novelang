@@ -17,7 +17,6 @@
 package org.novelang.common.tree;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 

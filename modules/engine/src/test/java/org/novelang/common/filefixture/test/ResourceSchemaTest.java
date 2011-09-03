@@ -22,14 +22,14 @@ import java.util.List;
 
 import org.junit.Rule;
 import org.junit.Test;
+import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
+import static org.junit.Assert.*;
+
 import org.novelang.common.filefixture.Directory;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.filefixture.ResourceSchema;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
-import static org.junit.Assert.*;
 
 /**
  * Tests for {@link org.novelang.common.filefixture.ResourceSchema}.

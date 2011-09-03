@@ -25,11 +25,11 @@ import java.util.Map;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link org.novelang.build.unicode.UnicodeNamesGenerator}.

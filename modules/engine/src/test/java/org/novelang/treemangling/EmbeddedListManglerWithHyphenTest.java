@@ -16,10 +16,10 @@
  */
 package org.novelang.treemangling;
 
-import org.novelang.parser.NodeKind;
-
 import static org.novelang.parser.NodeKind.EMBEDDED_LIST_ITEM_WITH_HYPHEN_;
 import static org.novelang.parser.NodeKind._EMBEDDED_LIST_WITH_HYPHEN;
+
+import org.novelang.parser.NodeKind;
 
 /**
  * Tests for {@link EmbeddedListMangler}.

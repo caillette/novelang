@@ -21,6 +21,7 @@ import java.io.File;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.novelang.ResourceTools;
 import org.novelang.common.Location;
 import org.novelang.logger.Logger;

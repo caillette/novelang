@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.common.StylesheetMap;

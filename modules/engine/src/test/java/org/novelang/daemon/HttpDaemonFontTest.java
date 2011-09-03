@@ -18,11 +18,11 @@ package org.novelang.daemon;
 
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests separated from the rest as they sometimes broke when ran in parallel.

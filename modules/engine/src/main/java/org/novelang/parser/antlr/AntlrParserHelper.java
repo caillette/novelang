@@ -19,6 +19,7 @@ package org.novelang.parser.antlr;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
+
 import org.novelang.common.Location;
 import org.novelang.common.LocationFactory;
 

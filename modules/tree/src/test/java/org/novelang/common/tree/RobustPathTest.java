@@ -17,10 +17,9 @@
 package org.novelang.common.tree;
 
 import com.google.common.base.Predicate;
-import static org.junit.Assert.assertEquals;
-
 import com.google.common.base.Predicates;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link RobustPath}.

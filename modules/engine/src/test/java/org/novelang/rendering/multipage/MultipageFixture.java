@@ -18,6 +18,9 @@ package org.novelang.rendering.multipage;
 
 import java.io.File;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -26,9 +29,6 @@ import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.MalformedRequestException;
 import org.novelang.rendering.RenditionMimeType;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
 
 /**
  * Lots of things to test multipage.

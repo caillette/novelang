@@ -24,10 +24,13 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import org.antlr.runtime.RecognitionException;
-import org.fest.assertions.Assertions;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Location;
 import org.novelang.common.Problem;
@@ -39,10 +42,6 @@ import org.novelang.parser.NodeKind;
 import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette

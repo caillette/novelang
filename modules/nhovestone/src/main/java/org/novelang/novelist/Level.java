@@ -16,11 +16,11 @@
  */
 package org.novelang.novelist;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang.StringUtils;
+
 import org.novelang.designator.Tag;
 
 /**

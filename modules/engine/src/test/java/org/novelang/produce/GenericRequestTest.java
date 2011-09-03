@@ -23,15 +23,15 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.*;
+
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
 import org.novelang.designator.TagTestTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 /**
  * Tests for {@link GenericRequest}.

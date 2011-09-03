@@ -22,13 +22,13 @@ import java.io.StringReader;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
-import org.novelang.configuration.fop.FopCustomization.Renderer;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import static org.fest.assertions.Assertions.assertThat;
+
+import org.novelang.configuration.fop.FopCustomization.Renderer;
 
 /**
  * @author Laurent Caillette

@@ -25,11 +25,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import static org.novelang.parser.NodeKind.*;
+
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Tree;
@@ -37,8 +38,6 @@ import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.designator.Tag;
 import org.novelang.outfit.DefaultCharset;
-
-import static org.novelang.parser.NodeKind.*;
 
 /**
  * @author Laurent Caillette

@@ -23,8 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
+
+import static org.novelang.KnownVersions.VERSION_0_38_1;
+import static org.novelang.KnownVersions.VERSION_0_41_0;
+
 import org.novelang.Version;
 import org.novelang.common.FileTools;
 import org.novelang.nhovestone.MeasurementBundle;
@@ -34,9 +37,6 @@ import org.novelang.novelist.Novelist;
 import org.novelang.outfit.Husk;
 import org.novelang.outfit.shell.ProcessCreationException;
 import org.novelang.outfit.shell.ProcessInitializationException;
-
-import static org.novelang.KnownVersions.VERSION_0_38_1;
-import static org.novelang.KnownVersions.VERSION_0_41_0;
 
 /**
  * @author Laurent Caillette

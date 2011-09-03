@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import static org.novelang.parser.NodeKind.*;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.NodeKind;
-
-import static org.novelang.parser.NodeKind.*;
 
 /**
  * Handles tricky rules about inserting spaces at the right place.

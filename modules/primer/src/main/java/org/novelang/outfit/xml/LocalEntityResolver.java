@@ -19,15 +19,15 @@ package org.novelang.outfit.xml;
 import java.io.IOException;
 
 import com.google.common.base.Preconditions;
-import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceName;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceName;
 
 /**
  * Fetches local files in the same directory as the stylesheet.

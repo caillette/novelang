@@ -17,7 +17,6 @@
 package org.novelang.parser.antlr;
 
 import org.junit.Test;
-
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 

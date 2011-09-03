@@ -21,12 +21,13 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.Token;
+
 import org.novelang.common.LocationFactory;
 import org.novelang.common.Problem;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.antlr.runtime.MismatchedTokenException;
-import org.antlr.runtime.Token;
 
 /**
  * Receives notifications from {@link org.novelang.parser.antlr.GrammarDelegate} from what's going on with delimiters.

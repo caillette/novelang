@@ -17,11 +17,11 @@
 
 package org.novelang.common;
 
+import java.util.Set;
+
 import org.novelang.common.tree.StorageTypeProvider;
 import org.novelang.common.tree.Tree;
 import org.novelang.parser.NodeKind;
-
-import java.util.Set;
 
 /**
  * Narrows the contract of an Abstract Syntax Tree.

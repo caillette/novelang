@@ -43,6 +43,10 @@ import com.google.common.collect.Sets;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.novelang.ResourcesForTests.TaggedPart;
+
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -55,10 +59,6 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.novelang.ResourcesForTests.TaggedPart;
 
 /**
  * Tests for Javascript-based interactive behavior.

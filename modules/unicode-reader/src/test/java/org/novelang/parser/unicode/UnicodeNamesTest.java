@@ -17,13 +17,13 @@
 
 package org.novelang.parser.unicode;
 
-import org.novelang.outfit.TextTools;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.lang.CharUtils;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.TextTools;
 
 /**
  * Tests for {@link UnicodeNames} basing on some well-known values.

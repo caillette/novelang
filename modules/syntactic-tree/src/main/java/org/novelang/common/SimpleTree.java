@@ -16,15 +16,15 @@
  */
 package org.novelang.common;
 
-import org.apache.commons.lang.NullArgumentException;
-import org.apache.commons.lang.ClassUtils;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.NullArgumentException;
+
 import org.novelang.common.tree.ImmutableTree;
 import org.novelang.parser.NodeKind;
-
-import java.util.Set;
 
 /**
  * Specific immplementation of a {@link org.novelang.common.tree.Tree}.

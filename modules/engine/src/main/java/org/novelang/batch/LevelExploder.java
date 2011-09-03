@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.common.SyntacticTree;

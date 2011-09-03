@@ -17,10 +17,11 @@
 package org.novelang.produce;
 
 import com.google.common.collect.ImmutableSet;
+
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.common.metadata.PageIdentifier;
 
 /**
  * The behavior of a document request.

@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import org.apache.commons.io.FilenameUtils;
+
 import org.novelang.Version;
 import org.novelang.VersionFormatException;
 

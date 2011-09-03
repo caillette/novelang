@@ -22,7 +22,6 @@ import java.net.MalformedURLException;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 

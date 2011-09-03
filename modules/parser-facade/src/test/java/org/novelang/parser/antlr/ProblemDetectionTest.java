@@ -18,8 +18,8 @@ package org.novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Check that problems are correctly reported.

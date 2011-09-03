@@ -21,10 +21,11 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.InputSource;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Tweaks DTD entity on-the-fly for escaping entity that we need to appear as-they-are

@@ -16,10 +16,10 @@
  */
 package org.novelang.treemangling;
 
-import org.novelang.parser.NodeKind;
-
 import static org.novelang.parser.NodeKind.EMBEDDED_LIST_ITEM_NUMBERED_;
 import static org.novelang.parser.NodeKind._EMBEDDED_LIST_WITH_NUMBER_SIGN;
+
+import org.novelang.parser.NodeKind;
 
 /**
  * Tests for {@link org.novelang.treemangling.EmbeddedListMangler}.

@@ -43,6 +43,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 

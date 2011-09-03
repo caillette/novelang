@@ -20,15 +20,14 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.TextTools;
 import org.novelang.outfit.loader.ResourceName;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableList.of;
 
 /**
  * Base class for processing elements from SAX events, where "buildup" objects represent

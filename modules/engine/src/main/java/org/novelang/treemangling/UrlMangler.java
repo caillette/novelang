@@ -19,15 +19,15 @@ package org.novelang.treemangling;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import static org.novelang.parser.NodeKind.URL_LITERAL;
+import static org.novelang.parser.NodeKind._URL;
+
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Traversal;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
-
-import static org.novelang.parser.NodeKind.URL_LITERAL;
-import static org.novelang.parser.NodeKind._URL;
 
 /**
  * Wraps {@link NodeKind#URL_LITERAL} nodes into {@link NodeKind#_URL} ones, adding

@@ -29,6 +29,7 @@ import org.apache.fop.fonts.Font;
 import org.apache.fop.fonts.FontTriplet;
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 

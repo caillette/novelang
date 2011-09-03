@@ -29,6 +29,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
+
 import org.novelang.KnownVersions;
 import org.novelang.Version;
 import org.novelang.common.FileTools;
@@ -39,7 +41,6 @@ import org.novelang.nhovestone.scenario.Measurer;
 import org.novelang.nhovestone.scenario.Upsizer;
 import org.novelang.outfit.shell.ProcessCreationException;
 import org.novelang.outfit.shell.ProcessInitializationException;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Starts and queries several {@link org.novelang.nhovestone.driver.HttpDaemonDriver}s against an evolving

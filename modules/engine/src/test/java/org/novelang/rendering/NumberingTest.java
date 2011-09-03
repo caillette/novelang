@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;

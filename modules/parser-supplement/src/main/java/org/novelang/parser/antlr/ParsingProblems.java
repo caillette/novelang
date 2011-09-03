@@ -16,10 +16,11 @@
  */
 package org.novelang.parser.antlr;
 
+import org.antlr.runtime.RecognitionException;
+
 import org.novelang.common.Location;
 import org.novelang.common.LocationFactory;
 import org.novelang.common.Problem;
-import org.antlr.runtime.RecognitionException;
 
 /**
  * Dedicated factory of {@link Problem} objects.

@@ -20,8 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.commons.lang.NullArgumentException;
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang.NullArgumentException;
 
 /**
  * Utility clas for accessing private members.

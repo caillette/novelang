@@ -20,6 +20,14 @@ package org.novelang.parser.antlr;
 import java.util.Iterator;
 import java.util.List;
 
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.RewriteEarlyExitException;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeAdaptor;
+
 import org.novelang.common.Location;
 import org.novelang.common.LocationFactory;
 import org.novelang.common.Problem;
@@ -30,13 +38,6 @@ import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.antlr.delimited.BlockDelimiter;
 import org.novelang.parser.antlr.delimited.BlockDelimiterSupervisor;
 import org.novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.MismatchedTokenException;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.tree.RewriteEarlyExitException;
-import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.tree.TreeAdaptor;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.

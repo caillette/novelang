@@ -16,16 +16,17 @@
  */
 package org.novelang.daemon;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
+
 import org.eclipse.jetty.server.Request;
+import org.xml.sax.SAXException;
+
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.logger.Logger;
@@ -37,7 +38,6 @@ import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.buffer.CisternOutputStream;
 import org.novelang.rendering.font.FontDiscoveryStreamer;
-import org.xml.sax.SAXException;
 
 /**
  * Generates a PDF document showing available fonts.

@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
+
 import org.novelang.common.Location;
 import org.novelang.common.LocationFactory;
 import org.novelang.common.SimpleTree;

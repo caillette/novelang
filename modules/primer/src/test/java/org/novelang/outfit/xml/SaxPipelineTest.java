@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

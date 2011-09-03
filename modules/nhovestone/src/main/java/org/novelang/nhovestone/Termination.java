@@ -16,11 +16,11 @@
  */
 package org.novelang.nhovestone;
 
+import java.util.Set;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
-
-import java.util.Set;
 
 /**
  * Kind of enum supporting inheritance.

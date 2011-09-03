@@ -16,8 +16,9 @@
  */
 package org.novelang.parser.antlr.delimited;
 
-import org.antlr.runtime.Token;
 import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.Token;
+
 import org.novelang.common.Problem;
 
 /**

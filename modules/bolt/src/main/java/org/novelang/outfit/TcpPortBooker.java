@@ -16,9 +16,9 @@
  */
 package org.novelang.outfit;
 
-import java.io.IOException ;
-import java.net.ServerSocket ;
-import java.util.concurrent.atomic.AtomicInteger ;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Scans local TCP ports for getting one available.

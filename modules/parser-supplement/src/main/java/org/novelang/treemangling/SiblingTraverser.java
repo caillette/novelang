@@ -16,10 +16,11 @@
  */
 package org.novelang.treemangling;
 
+import com.google.common.base.Function;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
-import com.google.common.base.Function;
 
 /**
  * A function that goes forward or backward across siblings of a {@code SyntacticTree}.

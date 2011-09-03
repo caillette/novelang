@@ -23,6 +23,8 @@ import java.io.OutputStream;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.FileUtils;
+import static com.google.common.base.Preconditions.checkArgument;
+
 import org.novelang.common.Renderable;
 import org.novelang.common.metadata.Page;
 import org.novelang.common.metadata.PageIdentifier;
@@ -31,8 +33,6 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.TemporaryFileTools;
 import org.novelang.rendering.buffer.CisternOutputStream;
 import org.novelang.rendering.multipage.PagesExtractor;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Dispatches one or more {@link Page}s into {@code OutputStream}s, and feeds them with rendered

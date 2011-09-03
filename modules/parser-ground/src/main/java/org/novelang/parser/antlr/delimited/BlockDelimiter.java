@@ -18,8 +18,8 @@ package org.novelang.parser.antlr.delimited;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 /**
  * This enum represents blocks (subset of a paragraph-like piece of source document) which

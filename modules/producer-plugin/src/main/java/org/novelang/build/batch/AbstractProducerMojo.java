@@ -19,11 +19,12 @@ package org.novelang.build.batch;
 import java.io.File;
 import java.io.IOException;
 
-import org.novelang.Version;
-import org.novelang.VersionFormatException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+
+import org.novelang.Version;
+import org.novelang.VersionFormatException;
 
 /**
  * @author Laurent Caillette

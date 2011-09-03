@@ -20,11 +20,11 @@ import com.google.common.base.Joiner;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+
 import org.novelang.common.Problem;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-
-import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
 
 /**
  * Get sure that delimiters problems are correctly reported.

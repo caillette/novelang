@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.lang.NullArgumentException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
+import org.apache.commons.lang.NullArgumentException;
 
 /**
  * Immutable base class for homogeneous n-ary trees.

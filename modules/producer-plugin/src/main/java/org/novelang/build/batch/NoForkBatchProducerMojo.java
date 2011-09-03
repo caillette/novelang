@@ -28,6 +28,7 @@ import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+
 import org.novelang.common.FileTools;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.ContentConfiguration;

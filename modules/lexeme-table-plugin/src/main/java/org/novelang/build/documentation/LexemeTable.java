@@ -27,14 +27,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.collect.Ordering;
+import org.apache.commons.lang.CharUtils;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.GeneratedLexemes;
 import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.shared.Lexeme;
 import org.novelang.rendering.RenderingEscape;
-import org.novelang.outfit.DefaultCharset;
-import org.apache.commons.lang.CharUtils;
 
 /**
  * Generates a source document containing all characters supported in input.

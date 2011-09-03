@@ -17,14 +17,14 @@
 package org.novelang.treemangling;
 
 import com.google.common.base.Preconditions;
+import static org.novelang.parser.NodeKind.*;
+
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Traversal;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
-
-import static org.novelang.parser.NodeKind.*;
 
 /**
  * Rehiererachizes embedded lists, wrapping them in

@@ -18,7 +18,6 @@ package org.novelang.parser.antlr;
 
 import antlr.RecognitionException;
 import org.junit.Test;
-
 import static org.novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 

@@ -16,11 +16,11 @@
  */
 package org.novelang.common.filefixture.test;
 
-import org.novelang.common.filefixture.Directory;
-import org.novelang.common.filefixture.Resource;
-
 import static org.novelang.common.filefixture.ResourceSchema.directory;
 import static org.novelang.common.filefixture.ResourceSchema.resource;
+
+import org.novelang.common.filefixture.Directory;
+import org.novelang.common.filefixture.Resource;
 
 /**
  * This interface is used for testing {@link org.novelang.common.filefixture.ResourceSchema}.

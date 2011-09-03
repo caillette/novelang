@@ -18,11 +18,11 @@ package org.novelang.testing;
 
 import java.util.concurrent.TimeUnit;
 
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.junit.Assert.fail;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * @author Laurent Caillette

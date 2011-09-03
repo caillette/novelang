@@ -16,9 +16,6 @@
  */
 package org.novelang.logger;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 /**
  * A simplistic implementation.
  *

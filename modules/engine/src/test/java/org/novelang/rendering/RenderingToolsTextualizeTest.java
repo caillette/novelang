@@ -18,11 +18,11 @@ package org.novelang.rendering;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.novelang.common.SyntacticTree;
-import org.novelang.outfit.DefaultCharset;
-
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
+
+import org.novelang.common.SyntacticTree;
+import org.novelang.outfit.DefaultCharset;
 
 /**
  * Tests for 

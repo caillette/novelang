@@ -20,11 +20,12 @@ package org.novelang.parser.antlr;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import org.antlr.runtime.tree.Tree;
+
 import org.novelang.common.Location;
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.parser.NodeKind;
-import org.antlr.runtime.tree.Tree;
 
 /**
  * Converts a {@link org.antlr.runtime.tree.Tree} into a {@link org.novelang.common.SyntacticTree}.

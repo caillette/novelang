@@ -22,18 +22,19 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
-import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceName;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
+
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceName;
 
 /**
  * Resolves an URI into an XML {@link Source}, basing on a

@@ -16,16 +16,15 @@
  */
 package org.novelang.common.tree;
 
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.AbstractIterator;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

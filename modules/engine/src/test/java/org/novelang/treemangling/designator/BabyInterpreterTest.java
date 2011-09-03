@@ -20,14 +20,14 @@ package org.novelang.treemangling.designator;
 import java.util.Map;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.RobustPath;
 import org.novelang.common.tree.Treepath;
 import org.novelang.designator.FragmentIdentifier;
-
-import static org.junit.Assert.*;
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link BabyInterpreter}.

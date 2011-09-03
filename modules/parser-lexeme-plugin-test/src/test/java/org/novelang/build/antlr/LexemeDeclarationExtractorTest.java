@@ -18,14 +18,14 @@ package org.novelang.build.antlr;
 
 import java.util.Set;
 
+import org.apache.commons.lang.CharUtils;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.shared.Lexeme;
-import org.apache.commons.lang.CharUtils;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link LexemeGenerator}.

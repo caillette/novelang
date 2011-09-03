@@ -18,10 +18,11 @@ package org.novelang.parser.antlr;
 
 import java.util.SortedSet;
 
-import org.antlr.runtime.RecognitionException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import org.antlr.runtime.RecognitionException;
+
 import org.novelang.common.Location;
 import org.novelang.common.LocationFactory;
 import org.novelang.common.Problem;

@@ -23,10 +23,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.xml.sax.InputSource;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.DtdTools;
-import org.xml.sax.InputSource;
 
 /**
  * Tests for {@link DtdTools}.

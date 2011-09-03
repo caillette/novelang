@@ -23,6 +23,9 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.RobustPath;
 import org.novelang.common.tree.Treepath;
@@ -32,9 +35,6 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.treemangling.designator.DesignatorTools;
 import org.novelang.treemangling.designator.FragmentMapper;
-
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for

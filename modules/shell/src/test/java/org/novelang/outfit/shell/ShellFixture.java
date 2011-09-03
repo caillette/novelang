@@ -20,9 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
-import org.novelang.testing.junit.MethodSupport;
-
 import static com.google.common.collect.ImmutableList.of;
+
+import org.novelang.testing.junit.MethodSupport;
 
 /**
  * Lots of stuff used by {@link JavaShellTest}. 

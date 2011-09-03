@@ -21,6 +21,7 @@ import java.io.PrintStream;
 
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.SystemUtils;
+
 import org.novelang.batch.CannotStartException;
 import org.novelang.batch.DocumentGenerator;
 import org.novelang.batch.LevelExploder;
@@ -32,8 +33,8 @@ import org.novelang.configuration.parse.LevelExploderParameters;
 import org.novelang.daemon.HttpDaemon;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.EnvironmentTools;
+import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.TemporaryFileTools;
 
 /**

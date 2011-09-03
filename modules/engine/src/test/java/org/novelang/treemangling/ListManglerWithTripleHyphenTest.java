@@ -16,10 +16,10 @@
  */
 package org.novelang.treemangling;
 
-import org.novelang.parser.NodeKind;
-
 import static org.novelang.parser.NodeKind.PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_;
 import static org.novelang.parser.NodeKind._LIST_WITH_TRIPLE_HYPHEN;
+
+import org.novelang.parser.NodeKind;
 
 /**
  * Tests for {@link org.novelang.treemangling.ListMangler}.

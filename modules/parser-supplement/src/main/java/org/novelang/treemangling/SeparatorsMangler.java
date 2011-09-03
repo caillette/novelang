@@ -16,14 +16,13 @@
  */
 package org.novelang.treemangling;
 
-import org.novelang.common.SyntacticTree;
+import static org.novelang.parser.NodeKind.*;
+
 import org.novelang.common.SimpleTree;
+import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
-
-import static org.novelang.parser.NodeKind.*;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Adds or removes various kinds of separators under various conditions.

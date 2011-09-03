@@ -16,9 +16,10 @@
  */
 package org.novelang.nhovestone.scenario;
 
+import org.junit.Test;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.junit.Test;
 
 /**
  * Tests for {@link TimeMeasurement}.

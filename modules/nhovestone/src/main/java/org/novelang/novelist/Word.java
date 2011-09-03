@@ -17,9 +17,8 @@
 package org.novelang.novelist;
 
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Single word, instead of {@code String}, for better typing.

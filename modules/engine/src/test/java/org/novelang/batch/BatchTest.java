@@ -22,6 +22,9 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.*;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -36,11 +39,6 @@ import org.novelang.produce.MalformedRequestException;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.multipage.MultipageFixture;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.MAIN;
-import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ONE;
-import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ZERO;
 
 /**
  * Tests for {@link DocumentGenerator}.

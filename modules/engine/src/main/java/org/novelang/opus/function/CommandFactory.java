@@ -25,6 +25,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import static org.novelang.parser.NodeKind.*;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.designator.FragmentIdentifier;
 import org.novelang.opus.function.builtin.FileOrdering;
@@ -33,8 +35,6 @@ import org.novelang.opus.function.builtin.MapstylesheetCommand;
 import org.novelang.opus.function.builtin.insert.LevelHead;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.NodeKindTools;
-
-import static org.novelang.parser.NodeKind.*;
 
 /**
  * Creates instances of {@link Command}.

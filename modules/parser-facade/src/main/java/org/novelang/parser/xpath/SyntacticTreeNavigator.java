@@ -24,12 +24,12 @@ import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.util.SingleObjectIterator;
+import static org.novelang.parser.NodeKindTools.tokenNameAsXmlElementName;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
-
-import static org.novelang.parser.NodeKindTools.tokenNameAsXmlElementName;
 
 /**
  * Jaxen-specific logic to apply XPath expressions to a {@link Treepath} of

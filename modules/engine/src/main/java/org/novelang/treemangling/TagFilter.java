@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.TagBehavior;
 import org.novelang.common.tree.Treepath;

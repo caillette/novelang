@@ -20,9 +20,8 @@ package org.novelang.common;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Preconditions;
-import org.antlr.runtime.tree.RewriteCardinalityException;
+import org.antlr.runtime.RecognitionException;
 
 //import novelang.parser.antlr.AntlrErrorInterpreter;
 

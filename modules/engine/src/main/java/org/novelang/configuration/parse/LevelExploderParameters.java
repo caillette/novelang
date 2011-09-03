@@ -20,12 +20,13 @@ import java.io.File;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.cli.Options;
+
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.MalformedRequestException;
-import org.novelang.rendering.RenditionMimeType;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
+import org.novelang.rendering.RenditionMimeType;
 
 /**
  * Same as {@link DocumentGeneratorParameters} but allows only one single document request

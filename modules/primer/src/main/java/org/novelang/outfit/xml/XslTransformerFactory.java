@@ -17,7 +17,6 @@
 package org.novelang.outfit.xml;
 
 import java.io.IOException;
-
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -25,18 +24,19 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
+
 import org.dom4j.Document;
 import org.dom4j.io.SAXWriter;
-import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceName;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceName;
 
 /**
  * Loads an XSL stylesheet (includes parsing) from various sources.

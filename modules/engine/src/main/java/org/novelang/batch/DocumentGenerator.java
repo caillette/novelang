@@ -23,6 +23,7 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.SystemUtils;
+
 import org.novelang.common.Problem;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.DocumentGeneratorConfiguration;

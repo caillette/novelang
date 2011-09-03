@@ -20,8 +20,8 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
-import org.apache.commons.lang.NullArgumentException;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.NullArgumentException;
 
 /**
  * Utility class for manipulating {@link Tree}s through copy-on-change.

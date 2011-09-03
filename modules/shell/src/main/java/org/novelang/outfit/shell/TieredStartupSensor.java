@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import com.google.common.base.Predicate;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.Iterables.filter;

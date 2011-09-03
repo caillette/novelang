@@ -17,7 +17,6 @@
 package org.novelang.outfit.loader;
 
 import org.junit.Test;
-
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

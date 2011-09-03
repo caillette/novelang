@@ -17,15 +17,15 @@
 
 package org.novelang.treemangling;
 
-import org.novelang.parser.NodeKind;
-import static org.novelang.parser.NodeKind.*;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import static org.novelang.parser.NodeKind.*;
+
+import org.novelang.parser.NodeKind;
 
 /**
  * @author Laurent Caillette

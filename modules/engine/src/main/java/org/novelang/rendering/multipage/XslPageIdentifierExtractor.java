@@ -18,13 +18,16 @@ package org.novelang.rendering.multipage;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-
-import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
+
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.output.NullOutputStream;
-import org.dom4j.Document;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
@@ -34,10 +37,6 @@ import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.rendering.GenericRenderer;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.XmlWriter;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Computes the pages of a document tree, using

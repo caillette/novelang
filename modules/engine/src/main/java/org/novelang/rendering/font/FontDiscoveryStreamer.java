@@ -16,22 +16,23 @@
  */
 package org.novelang.rendering.font;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Set;
+import javax.xml.transform.TransformerConfigurationException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import javax.xml.transform.TransformerConfigurationException;
 import org.apache.fop.fonts.FontTriplet;
 import org.dom4j.Namespace;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
+import org.xml.sax.SAXException;
+
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.Page;
 import org.novelang.configuration.FontQuadruplet;
@@ -42,7 +43,6 @@ import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.parser.GeneratedLexemes;
 import org.novelang.rendering.PdfWriter;
 import org.novelang.rendering.XslWriter;
-import org.xml.sax.SAXException;
 
 /**
  * Generates a PDF in an {@code OutputStream}.

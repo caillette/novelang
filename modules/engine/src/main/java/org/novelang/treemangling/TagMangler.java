@@ -21,6 +21,8 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import static org.novelang.parser.NodeKind.*;
+
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.TagBehavior;
@@ -31,8 +33,6 @@ import org.novelang.designator.Tag;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.NodeKindTools;
 import org.novelang.rendering.RenderingTools;
-
-import static org.novelang.parser.NodeKind.*;
 
 /**
  * Deals with {@link NodeKind#TAG}, {@link NodeKind#_EXPLICIT_TAG}, 

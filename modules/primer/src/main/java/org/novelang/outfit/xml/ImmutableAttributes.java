@@ -18,10 +18,8 @@ package org.novelang.outfit.xml;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import org.xml.sax.Attributes;
 
 /**

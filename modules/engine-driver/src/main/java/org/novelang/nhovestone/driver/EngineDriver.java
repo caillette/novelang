@@ -22,6 +22,11 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang.StringUtils;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONPREFIX;
+
 import org.novelang.Version;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.outfit.DefaultCharset;
@@ -33,11 +38,6 @@ import org.novelang.outfit.shell.JavaShellParameters;
 import org.novelang.outfit.shell.ProcessCreationException;
 import org.novelang.outfit.shell.ProcessInitializationException;
 import org.novelang.outfit.shell.ShutdownStyle;
-import org.apache.commons.lang.StringUtils;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONPREFIX;
 
 /**
  * Encapsulates a {@link JavaShell}, factoring common code for running either a

@@ -19,7 +19,6 @@ package org.novelang.logger;
 import com.google.common.collect.ImmutableList;
 import org.junit.After;
 import org.junit.Test;
-
 import static org.fest.assertions.Assertions.assertThat;
 
 /**

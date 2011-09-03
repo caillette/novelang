@@ -17,6 +17,7 @@
 package org.novelang.outfit.xml;
 
 import javax.xml.transform.SourceLocator;
+
 import org.xml.sax.Locator;
 
 /**

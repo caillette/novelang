@@ -28,29 +28,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javax.imageio.ImageIO;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import javax.imageio.ImageIO;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.dom4j.DocumentException;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.novelang.Version;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.novelang.nhovestone.MeasurementBundle;
-import org.novelang.nhovestone.Termination;
-import org.novelang.nhovestone.scenario.TimeMeasurement;
-import org.novelang.nhovestone.scenario.TimeMeasurer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
@@ -65,12 +56,18 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
-import org.novelang.novella.VectorImageTools;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
+
+import org.novelang.Version;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.nhovestone.MeasurementBundle;
+import org.novelang.nhovestone.Termination;
+import org.novelang.nhovestone.scenario.TimeMeasurement;
+import org.novelang.nhovestone.scenario.TimeMeasurer;
+import org.novelang.novella.VectorImageTools;
 
 /**
  * Generates the graph representing {@link org.novelang.nhovestone.Scenario#getMeasurements()}.

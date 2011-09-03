@@ -20,15 +20,16 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import org.apache.xml.utils.MutableAttrListImpl;
-import org.novelang.outfit.xml.NamespaceAwareness;
-import org.novelang.outfit.xml.SaxPipeline;
-import org.novelang.outfit.xml.SaxRecorder;
-import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import org.novelang.outfit.xml.NamespaceAwareness;
+import org.novelang.outfit.xml.SaxPipeline;
+import org.novelang.outfit.xml.SaxRecorder;
+import org.novelang.outfit.xml.XmlNamespaces;
 
 /**
  * Captures the XML document inside a &lt;{@value #MULTIPAGE_STYLESHEET_LOCALNAME}> element

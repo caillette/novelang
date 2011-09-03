@@ -33,6 +33,13 @@ import org.fest.reflect.reference.TypeRef;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.novelang.ResourcesForTests.FontStructure;
+import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
+import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
+import static org.novelang.configuration.parse.GenericParametersConstants.*;
+
 import org.novelang.ResourcesForTests;
 import org.novelang.common.FileTools;
 import org.novelang.common.filefixture.Relativizer;
@@ -49,15 +56,6 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.UrlResourceLoader;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.testing.junit.MethodSupport;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.novelang.ResourcesForTests.FontStructure;
-import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
-import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
-import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONNAME_CONTENT_ROOT;
-import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES;
-import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONPREFIX;
 
 /**
  * Tests for {@link ConfigurationTools}.

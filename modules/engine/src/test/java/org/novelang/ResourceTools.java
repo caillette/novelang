@@ -39,6 +39,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
+
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.ContentConfiguration;
 import org.novelang.configuration.DaemonConfiguration;

@@ -22,6 +22,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+
 import org.novelang.designator.Tag;
 import org.novelang.nhovestone.Scenario;
 import org.novelang.novelist.BodyGenerator;
@@ -30,8 +31,8 @@ import org.novelang.novelist.Level;
 import org.novelang.novelist.LevelGenerator;
 import org.novelang.novelist.Novelist;
 import org.novelang.novelist.SentenceGenerator;
-import org.novelang.novelist.WordGenerator;
 import org.novelang.novelist.SupportedLocales;
+import org.novelang.novelist.WordGenerator;
 import org.novelang.outfit.Husk;
 
 /**
