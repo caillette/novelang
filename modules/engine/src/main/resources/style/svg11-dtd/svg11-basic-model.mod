@@ -1,18 +1,22 @@
+<!--
+  ~ Copyright (C) 2011 Laurent Caillette
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <!-- ....................................................................... -->
 <!-- SVG 1.1 Basic Document Model Module ................................... -->
-<!-- file: svg11-basic-model.mod
-
-     This is SVG Basic, a proper subset of SVG.
-     Copyright 2001, 2002 W3C (MIT, INRIA, Keio), All Rights Reserved.
-     Revision: $Id: svg11-basic-model.mod,v 1.5 2002/11/14 15:11:03 fujisawa Exp $
-
-     This DTD module is identified by the PUBLIC and SYSTEM identifiers:
-
-        PUBLIC "-//W3C//ENTITIES SVG 1.1 Basic Document Model//EN"
-        SYSTEM "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic-model.mod"
-
-     ....................................................................... -->
-
 <!-- SVG 1.1 Basic Document Model
 
      This module describes the groupings of elements that make up

@@ -1,18 +1,22 @@
+<!--
+  ~ Copyright (C) 2011 Laurent Caillette
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <!-- ....................................................................... -->
 <!-- SVG 1.1 Shape Module .................................................. -->
-<!-- file: svg-shape.mod
-
-     This is SVG, a language for describing two-dimensional graphics in XML.
-     Copyright 2001, 2002 W3C (MIT, INRIA, Keio), All Rights Reserved.
-     Revision: $Id: svg-shape.mod,v 1.3 2002/10/24 17:40:16 fujisawa Exp $
-
-     This DTD module is identified by the PUBLIC and SYSTEM identifiers:
-
-        PUBLIC "-//W3C//ELEMENTS SVG 1.1 Shape//EN"
-        SYSTEM "http://www.w3.org/Graphics/SVG/1.1/DTD/svg-shape.mod"
-
-     ....................................................................... -->
-
 <!-- Shape
 
         path, rect, circle, line, ellipse, polyline, polygon

@@ -1,18 +1,22 @@
+<!--
+  ~ Copyright (C) 2011 Laurent Caillette
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <!-- ....................................................................... -->
 <!-- SVG 1.1 Basic Paint Attribute Module .................................. -->
-<!-- file: svg-basic-paint-attrib.mod
-
-     This is SVG, a language for describing two-dimensional graphics in XML.
-     Copyright 2001, 2002 W3C (MIT, INRIA, Keio), All Rights Reserved.
-     Revision: $Id: svg-basic-paint-attrib.mod,v 1.1 2002/11/13 20:14:30 fujisawa Exp $
-
-     This DTD module is identified by the PUBLIC and SYSTEM identifiers:
-
-        PUBLIC "-//W3C//ENTITIES SVG 1.1 Basic Paint Attribute//EN"
-        SYSTEM "http://www.w3.org/Graphics/SVG/1.1/DTD/svg-basic-paint-attrib.mod"
-
-     ....................................................................... -->
-
 <!-- Basic Paint Attribute
 
         fill, fill-rule, stroke, stroke-dasharray, stroke-dashoffset,
