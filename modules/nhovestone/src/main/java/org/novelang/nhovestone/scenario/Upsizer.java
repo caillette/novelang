@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Laurent Caillette
+ * Copyright (C) 2011 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  *
-* @author Laurent Caillette
+ * @author Laurent Caillette
 */
 public interface Upsizer< UPSIZING > {
 
