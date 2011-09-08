@@ -57,4 +57,27 @@ public class TimeMeasurement {
   public String toString() {
     return getClass().getSimpleName() + "[" + asFormattedString() + "]" ;
   }
+
+  @Override
+  public boolean equals( final Object other ) {
+    if( this == other ) {
+      return true ;
+    }
+    if( other == null || getClass() != other.getClass() ) {
+      return false ;
+    }
+
+    final TimeMeasurement that = ( TimeMeasurement ) other ;
+
+    if( timeMilliseconds != that.timeMilliseconds ) {
+      return false ;
+    }
+
+    return true ;
+  }
+
+  @Override
+  public int hashCode() {
+    return ( int ) ( timeMilliseconds ^ ( timeMilliseconds >>> 32 ) ) ;
+  }
 }
