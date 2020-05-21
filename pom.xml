@@ -239,7 +239,7 @@
 
     <lib.htmlunit.groupId>net.sourceforge.htmlunit</lib.htmlunit.groupId>
     <lib.htmlunit.artifactId>htmlunit</lib.htmlunit.artifactId>
-    <lib.htmlunit.version>2.6</lib.htmlunit.version>
+    <lib.htmlunit.version>2.37.0</lib.htmlunit.version>
 
     <lib.fest-assert.groupId>org.easytesting</lib.fest-assert.groupId>
     <lib.fest-assert.artifactId>fest-assert</lib.fest-assert.artifactId>
