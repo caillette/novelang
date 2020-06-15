@@ -188,7 +188,7 @@
 
     <lib.apache-commons-collections.groupId>commons-collections</lib.apache-commons-collections.groupId>
     <lib.apache-commons-collections.artifactid>commons-collections</lib.apache-commons-collections.artifactid>
-    <lib.apache-commons-collections.version>3.2.1</lib.apache-commons-collections.version>
+    <lib.apache-commons-collections.version>3.2.2</lib.apache-commons-collections.version>
 
     <lib.joda-time.groupId>joda-time</lib.joda-time.groupId>
     <lib.joda-time.artifactid>joda-time</lib.joda-time.artifactid>
