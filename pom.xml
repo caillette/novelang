@@ -145,7 +145,7 @@
 
     <lib.junit.groupid>junit</lib.junit.groupid>
     <lib.junit.artifactid>junit</lib.junit.artifactid>
-    <lib.junit.version>4.8.2</lib.junit.version>
+    <lib.junit.version>4.13.1</lib.junit.version>
 <!--
     <lib.antlr.groupid>org.antlr</lib.antlr.groupid>
     <lib.antlr-compiler.artifactid>antlr</lib.antlr-compiler.artifactid>
