@@ -263,7 +263,7 @@
 
     <lib.jcraft-java-secure-channel.groupId>com.jcraft</lib.jcraft-java-secure-channel.groupId>
     <lib.jcraft-java-secure-channel.artifactId>jsch</lib.jcraft-java-secure-channel.artifactId>
-    <lib.jcraft-java-secure-channel.version>0.1.42</lib.jcraft-java-secure-channel.version>
+    <lib.jcraft-java-secure-channel.version>0.1.54</lib.jcraft-java-secure-channel.version>
 
     <lib.maven-project.groupId>org.apache.maven</lib.maven-project.groupId>
     <lib.maven-project.artifactid>maven-project</lib.maven-project.artifactid>
